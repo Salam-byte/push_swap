@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-static long	ft_atoi_long(char *str)
+static long	ft_atoi_long(char *str, t_node **a)
 // Convert the string to long value .
 {
 	long	result;
@@ -32,6 +32,12 @@ static long	ft_atoi_long(char *str)
 	{
 		result = result * 10 + str[i] - '0';
 		i++;
+	}
+	if (result == 0 && neg == -1)
+	{
+		write(2, "Error\n", 7);
+		free_stack(a);
+		exit(1);
 	}
 	return (result * neg);
 }
@@ -71,18 +77,18 @@ void	stack_init(t_node **a, char **str)
 	{
 		if (error_syntax(str[i]))
 		{
-			write(1, "syntax error", 13);
+			write(2, "Error\n", 7);
 			return (free_stack(a));
 		}
-		number = ft_atoi_long(str[i]);
+		number = ft_atoi_long(str[i], a);
 		if (number > 2147483647 || number < -2147483648)
 		{
-			write(1, "more or less than int\n", 23);
+			write(2, "Error\n", 7);
 			return (free_stack(a));
 		}
 		if (error_repeat(*a, (int)number))
 		{
-			write(1, "repeated value\n", 16);
+			write(2, "Error\n", 7);
 			return (free_stack(a));
 		}
 		add_node(a, (int)number);
